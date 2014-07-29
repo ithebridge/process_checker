@@ -44,6 +44,7 @@ int is_numeric( const char * s ){
 char* read_all_file( const char* input_file ){
 	int buffer_size = 256;
 	char *file_contents = malloc( buffer_size );
+	file_contents[ 0 ] = '\0';
 	FILE *file_stream = NULL;
 	char buffer[ buffer_size ];
 	ssize_t length_read = 0;
@@ -58,11 +59,8 @@ char* read_all_file( const char* input_file ){
 	//If it opened
 	if( open_failed == 0 ){
 		while( fgets( buffer, buffer_size, file_stream ) != NULL ){
-			//Set the final car in the array to be a null char so the strcat behaves as we expect
-			file_contents[ length_read ] = '\0';
 			length_read += buffer_size;
 			file_contents = realloc( file_contents, length_read + 1 );
-
 			strcat( file_contents, buffer );
 		}	
 	}
@@ -283,7 +281,7 @@ int list_processes( struct config *config_options ){
 					strcat( stat, timestamp );
 					strcat( stat, "\n" );
 					int sent;
-//					printf( "stat: %s\n )", stat );
+//					printf( "stat: %s\n", stat );
 					if ( ( sent = ( send( sock, stat, strlen( stat ), 0) ) != strlen( stat ) ) ){
 						printf("send() sent %i bytes\n", sent);
 					}
